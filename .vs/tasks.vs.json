@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-Core",
+      "appliesTo": "Core/Core.csproj",
+      "type": "msbuild"
+    },
+    {
+      "taskLabel": "task-WebApi",
+      "appliesTo": "/",
+      "type": "launch"
+    }
+  ]
+}

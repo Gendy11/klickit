@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\WebApi",
+    "\\WebApi\\Controllers",
+    "\\WebApi\\Errors",
+    "\\WebApi\\Middleware"
+  ],
+  "SelectedNode": "\\WebApi\\Startup.cs",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 1,
+    "Name": "Concrete"
+  },
+  {
+    "Id": 2,
+    "Name": "Staedtler"
+  },
+  {
+    "Id": 3,
+    "Name": "JanSport"
+  },
+  {
+    "Id": 4,
+    "Name": "Pearson"
+  },
+  {
+    "Id": 5,
+    "Name": "Scholastic"
+  },
+  {
+    "Id": 6,
+    "Name": "Papier"
+  }
+]
