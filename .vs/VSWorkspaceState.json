@@ -1,11 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\WebApi",
-    "\\WebApi\\Controllers",
-    "\\WebApi\\Errors",
-    "\\WebApi\\Middleware"
+    "\\Core",
+    "\\Core\\Interfaces",
+    "\\Core\\Specifications",
+    "\\Infrastructure",
+    "\\Infrastructure\\Data",
+    "\\WebApi\\Controllers"
   ],
-  "SelectedNode": "\\WebApi\\Startup.cs",
+  "SelectedNode": "\\docker-compose.yml",
   "PreviewInSolutionExplorer": false
 }
