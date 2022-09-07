@@ -19,6 +19,10 @@ using AutoMapper;
 using WebApi.Middleware;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using WebApi.Errors;
+using Infrastructure.Identity;
+using Core.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using StackExchange.Redis;
 
 namespace API
 {
@@ -38,8 +42,19 @@ namespace API
 
             services.AddScoped<IProductRepository,ProductRepository>();
             services.AddScoped(typeof(IGenericRepository<>),(typeof(GenericRepository<>)));
+            services.AddScoped<IBasketRepository,BasketRepository>();
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var configuration=ConfigurationOptions.Parse(_configuration.GetConnectionString("Redis"),true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
+            services.AddDbContext<AppIdentityDbContext>(x =>
+            {
+                x.UseSqlite(_configuration.GetConnectionString("IdentityConnection"));
+            });
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext =>
@@ -66,9 +81,17 @@ namespace API
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200/home");
                 });
             });
+
+            var builder = services.AddIdentityCore<AppUser>();
+            builder = new IdentityBuilder(builder.UserType, builder.Services);
+            builder.AddEntityFrameworkStores<AppIdentityDbContext>();
+            builder.AddSignInManager<SignInManager<AppUser>>();
+            services.AddAuthentication();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
