@@ -23,6 +23,10 @@ using Infrastructure.Identity;
 using Core.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using StackExchange.Redis;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Infrastructure.Services;
 
 namespace API
 {
@@ -39,6 +43,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(MappingProfiles));
+            services.AddScoped<ITokenService,TokenService>();
 
             services.AddScoped<IProductRepository,ProductRepository>();
             services.AddScoped(typeof(IGenericRepository<>),(typeof(GenericRepository<>)));
@@ -85,11 +90,23 @@ namespace API
                 });
             });
 
+
             var builder = services.AddIdentityCore<AppUser>();
             builder = new IdentityBuilder(builder.UserType, builder.Services);
             builder.AddEntityFrameworkStores<AppIdentityDbContext>();
             builder.AddSignInManager<SignInManager<AppUser>>();
-            services.AddAuthentication();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters=new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey=true,
+                        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"])),
+                        ValidIssuer = _configuration["Token:Issuer"],
+                        ValidateIssuer=true,
+                        ValidateAudience=false
+                    };
+                });
 
             
         }
@@ -108,6 +125,7 @@ namespace API
             app.UseRouting();
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
