@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Infrastructure.Services;
+using Core.Entities.OrderAggregate;
 
 namespace API
 {
@@ -42,6 +43,8 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddScoped<IOrderService,OrderService>();
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddScoped<ITokenService,TokenService>();
 
