@@ -15,6 +15,7 @@
             {
                 400 => "You have made a bad request",
                 401 => "You are not Authorized",
+                403 => "You are forbidden from doing this",
                 404 => "Resource not found",
                 500 => "Server error",
                 _ => null

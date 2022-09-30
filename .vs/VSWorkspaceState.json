@@ -2,12 +2,16 @@
   "ExpandedNodes": [
     "",
     "\\Core",
-    "\\Core\\Interfaces",
-    "\\Core\\Specifications",
+    "\\Core\\Entities",
+    "\\Core\\Entities\\Identity",
     "\\Infrastructure",
     "\\Infrastructure\\Data",
-    "\\WebApi\\Controllers"
+    "\\Infrastructure\\Data\\SeedData",
+    "\\WebApi",
+    "\\WebApi\\Helpers",
+    "\\WebApi\\wwwroot",
+    "\\WebApi\\wwwroot\\images",
+    "\\WebApi\\wwwroot\\images\\products"
   ],
-  "SelectedNode": "\\docker-compose.yml",
   "PreviewInSolutionExplorer": false
 }

@@ -6,6 +6,13 @@ namespace Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpecification :BaseSpecification<Product>
     {
+        public ProductsWithTypesAndBrandsSpecification()
+        {
+
+            AddInclude(x => x.ProductType);
+            AddInclude(x => x.ProductBrand);
+
+        }
         public ProductsWithTypesAndBrandsSpecification(ProductSpecParams productParams)
             :base(x=>
             (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&

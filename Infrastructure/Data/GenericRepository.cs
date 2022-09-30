@@ -7,7 +7,7 @@ using System.Linq;
 using Core.Specifications;
 using Core.Interfaces;
 using Core.Entities;
-
+using System.Security.Policy;
 
 namespace Infrastructure.Data 
 { 
@@ -46,6 +46,23 @@ namespace Infrastructure.Data
         {
             return await ApplySpecification(spec).CountAsync();
         }
+        public async Task<int> Save()
+        {
+            return await _context.SaveChangesAsync();
+        }
 
+        public void Add(T entity)
+        {
+            _context.Set<T>().Add(entity);
+        }
+        public void Update(T entity)
+        {
+            _context.Set<T>().Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+        public void Delete(T entity)    
+        {
+            _context.Set<T>().Remove(entity);
+        }
     }
 }

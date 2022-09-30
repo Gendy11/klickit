@@ -13,7 +13,6 @@ using Core.Interfaces;
 
 namespace WebApi.Controllers
 {
-    [Authorize]
     public class OrdersController : BaseApiController
     {
         private readonly IOrderService _orderService;
@@ -23,7 +22,7 @@ namespace WebApi.Controllers
             _orderService = orderService;
             _mapper = mapper;
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
         {
@@ -35,6 +34,7 @@ namespace WebApi.Controllers
 
             return Ok(order);
         }
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<OrderDto>>> GetOrdersForUser()
         {
@@ -43,21 +43,40 @@ namespace WebApi.Controllers
 
             return Ok(_mapper.Map<IReadOnlyList<Order>,IReadOnlyList<OrderToReturnDto>>(orders));
         }
-
+        [Authorize]
         [HttpGet("{id}")]
 
         public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
         {
-            var email = HttpContext.User.RetrieveEmailFromPrincipal();
+            var email = HttpContext.User.RetrieveEmailFromPrincipal(); 
             var order = await _orderService.GetOrderByIdAsync(id, email);
             if (order == null) return NotFound(new ApiResponse(404));
             return _mapper.Map<Order,OrderToReturnDto>(order);
         }
-
+        [Authorize]
         [HttpGet("deliveryMethods")]
         public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
         {
             return Ok(await _orderService.GetDeliveryMethodsAsync());
+        }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IReadOnlyList<OrderDto>>> GetAllOrders()
+        {
+            var orders=await _orderService.GetAllOrdersAsync();
+            return Ok(_mapper.Map<IReadOnlyList<Order>,IReadOnlyList<OrderToReturnDto>>(orders));
+        }
+        [HttpPost("accept")]
+        public async Task<ActionResult<Order>> AcceptOrder(OrderToReturnDto orderToReturnDto)
+        {
+            var order=await _orderService.AcceptOrderAsync(orderToReturnDto.Id);
+            return Ok(order);
+        }
+        [HttpPost("reject")]
+        public async Task<ActionResult<Order>> RejectOrder(OrderToReturnDto orderToReturnDto)
+        {
+            var order=await _orderService.RejectOrderAsync(orderToReturnDto.Id);
+            return Ok(order);
         }
     }
 }
